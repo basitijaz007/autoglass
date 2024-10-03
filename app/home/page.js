@@ -16,11 +16,22 @@ export default function Main() {
   const [makeOptions, setMakeOptions] = useState([]);
   const [modelOptions, setModelOptions] = useState([]);
   const [styleOptions, setStyleOptions] = useState([]);
+  const [glassOptions] = useState([
+    { Value: "windshield", Text: "Windshield" },
+    { Value: "passenger_front", Text: "Passenger Front - Door Glass" },
+    { Value: "driver_front", Text: "Driver Front - Door Glass" },
+    { Value: "passenger_back", Text: "Passenger Back - Door Glass" },
+    { Value: "driver_back", Text: "Driver Back - Door Glass" },
+    { Value: "passenger_quarter", Text: "Passenger Quarter" },
+    { Value: "driver_quarter", Text: "Driver Quarter" },
+    { Value: "back_glass", Text: "Back Glass" },
+  ]);
 
   const [year, setYear] = useState("");
   const [make, setMake] = useState("");
   const [model, setModel] = useState("");
   const [style, setStyle] = useState("");
+  const [glass, setGlass] = useState("");
   const [zipCode, setZipCode] = useState("");
 
   const router = useRouter();
@@ -67,7 +78,7 @@ export default function Main() {
     }
   }, [year]);
 
-  // Fetch Models 
+  // Fetch Models
   useEffect(() => {
     if (make) {
       const fetchModels = async () => {
@@ -109,10 +120,8 @@ export default function Main() {
     }
   }, [model]);
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
 
     if (!zipCode || !year || !make || !model || !style) {
       alert("Please fill in all fields.");
@@ -125,6 +134,7 @@ export default function Main() {
       make_id: make,
       model_id: model,
       style_id: style,
+      glass_id: glass,
     };
 
     try {
@@ -220,7 +230,7 @@ export default function Main() {
               type="text"
               placeholder="Enter Zip Code"
               value={zipCode}
-              onChange={(e) => setZipCode(e.target.value)} 
+              onChange={(e) => setZipCode(e.target.value)}
               className="p-3 rounded-lg shadow-lg border border-gray-300 text-black w-64"
               required
             />
@@ -305,12 +315,28 @@ export default function Main() {
                   ))}
                 </select>
               </div>
+              <div className="relative flex items-center w-full max-w-xs">
+                <select
+                  value={glass}
+                  onChange={(e) => setGlass(e.target.value)}
+                  className="block w-full pl-4 pr-4 py-2 border border-gray-300 bg-white rounded-full text-gray-700 focus:outline-none focus:ring focus:border-indigo-300"
+                  disabled={!style}
+                >
+                  <option value="">Glass Type</option>
+                  {glassOptions.map((option) => (
+                    <option key={option.Value} value={option.Value}>
+                      {option.Text}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
+          {/* Glass Type Dropdown */}
 
           <div className="flex justify-center mt-6">
             <button
-              type="submit" // Submit the form
+              type="submit" 
               className="bg-blue-500 text-white px-6 py-3 rounded-full"
             >
               Get Quotes Now
